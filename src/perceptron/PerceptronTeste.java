@@ -10,78 +10,81 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author FaelT
  */
 public class PerceptronTeste {
-        static double entradasArquivo[][] = new double[100][100];
-        static int saidasArquivo[] = new int[20];
-        static double [][] entradas;
-        static int [] saidas;
-        static int contador = 0;
-        static int variaveis = 0;
-    public static void lerArquivo(String nome) throws FileNotFoundException, IOException{
-        BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\e.rafael.medeiros\\Documentos\\NetBeansProjects\\Perceptron\\src\\perceptron/"+nome));
-        contador = 0;
-        while(br.ready()){
-            String linha = br.readLine();
-            
-            contador ++;
-            String [] valores = linha.split(" ");
-            variaveis = valores.length-1;
-            for(int i = 0; i<=variaveis; i++){
-                entradasArquivo[contador][i] = Double.parseDouble(valores[i]);
-            }
-            saidasArquivo[contador] = Integer.parseInt(valores[valores.length]);
-            System.out.println(linha);
-        }
-        br.close();
-    }
-    
-    public static void main(String [] args) throws IOException{
-        Perceptron p = new Perceptron();
-        //double entradas[][]={{0,0},{0,1},{1,0},{1,1}};
-        //int saidas[] = {1,1,1,0};
-       // double entradas[][];
-        //int saidas[];
-       
-        
-        
-        
-        
-        Scanner in = new Scanner(System.in);
-        String linha;
-        System.out.println("Informe o nome do arquivo desejado");
-        linha = in.next();
-        
-        lerArquivo(linha);
-         for(int i = 0; i<variaveis; i++){
-             for(int j=0; j<variaveis; j++){
-                 entradas[i][j] = entradasArquivo[i][j];
-             }
-        }
-         for(int i=0; i<contador; i++){
-             saidas[i] = saidasArquivo[i];
-         }
-        
-         for(int i = 0; i<variaveis; i++){
-             for(int j=0; j<variaveis; j++){
-                 System.out.print(entradas[i][j]);
-                 
-             }
-             System.out.println("");
-        }
-         for(int i=0; i<contador; i++){
-             System.out.print(saidas[i]);
-         }
-         
-       // p.treinar(entradas, saidas, 0.2, 0.1, 200);
-        //System.out.println(p.Saida(new double[]{0,0}));
-        //System.out.println(p.Saida(new double[]{1,0}));
-        //System.out.println(p.Saida(new double[]{0,1}));
-        //System.out.println(p.Saida(new double[]{1,1}));
-    }
-    
+   static double [][] entradas;
+   static int [] saidas;
+  
+   public static double [] lerArquivo(String nome) throws FileNotFoundException, IOException{
+      BufferedReader br = new BufferedReader(new FileReader(nome));
+      double [] resposta = new double[200]; 
+      if(br.ready()){
+         String linha = br.readLine();
+         resposta = new double[linha.length()];
+         String [] valores = linha.split(" ");
+         for(int i = 0; i<linha.length(); i++){
+            resposta[i] = Double.parseDouble(valores[i]);
+         }      
+         return resposta;
+      }
+      br.close();
+      return resposta;
+   }
+   
+   public static Perceptron treinandoAND(){
+      Perceptron p = new Perceptron();
+      double entradas[][]={{0,0},{0,1},{1,0},{1,1}};
+      int saidas[] = {0,0,0,1};
+      p.treinar(entradas, saidas, 0.2, 0.1, 200);
+      return p;
+   }
+   
+   public static Perceptron treinandoOR(){
+      Perceptron p = new Perceptron();
+      double entradas[][]={{0,0},{0,1},{1,0},{1,1}};
+      int saidas[] = {1,1,1,0};
+      p.treinar(entradas, saidas, 0.2, 0.1, 200);
+      return p;
+   }
+   
+   public static Perceptron treinandoXOR(){
+      Perceptron p = new Perceptron();
+      double entradas[][]={{0,0},{0,1},{1,0},{1,1}};
+      int saidas[] = {0,1,1,0};
+      p.treinar(entradas, saidas, 0.2, 0.1, 200);
+      return p;
+   }
+   public static void main(String [] args) throws IOException{
+      Perceptron pAnd = treinandoAND();
+      Perceptron pOr = treinandoOR();
+      Perceptron pXor = treinandoXOR();
+      
+      
+      
+      
+      Scanner in = new Scanner(System.in);
+      String linha;
+      
+      
+       //System.out.println("Informe o nome do arquivo desejado ou digite 0 para sair");
+       //linha = JOptionPane.showInputDialog(null,"Entre com o nome do arquivo");
+       //linha = in.next();
+       //while(!linha.equals("0")){
+       // double [] entrada = lerArquivo(linha);
+       double [] entrada = {0,1,0};
+       System.out.println("Resultado AND");
+       System.out.println(pAnd.Saida(entrada));
+       System.out.println("Resultado OR");
+       System.out.println(pOr.Saida(entrada));
+       System.out.println("Resultado XOR");
+       System.out.println(pXor.Saida(entrada));
+       System.out.println("Digite o nome do proximo arquivo: ");
+       //}
+   }
+   
 }
